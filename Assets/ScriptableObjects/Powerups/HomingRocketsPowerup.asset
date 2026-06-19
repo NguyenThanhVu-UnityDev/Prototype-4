@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbd64ecb7972e17499d0d87ef3ea09da, type: 3}
+  m_Name: HomingRocketsPowerup
+  m_EditorClassIdentifier: 
+  activeTime: 10
+  rocketPrefab: {fileID: 5165811116678338933, guid: d152673c59ee790468a41d15a0b72081, type: 3}
+  shootInterval: 1
+  detectionRadius: 10

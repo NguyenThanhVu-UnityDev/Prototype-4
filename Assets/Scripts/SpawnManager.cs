@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] Enemy enemyPrefab;
-    [SerializeField] GameObject powerupPrefab;
+    [SerializeField] List<Enemy> enemyPrefabs = new();
+    [SerializeField] List<PowerupItem> powerupItemPrefabs = new();
     [SerializeField] float spawnRange = 9;
 
     private int enemyCount;
@@ -11,7 +12,6 @@ public class SpawnManager : MonoBehaviour
 
     private void Start()
     {
-        if (enemyPrefab == null) return;
         SpawnEnemyWave(waveNumber);
         SpawnPowerup();
     }
@@ -38,16 +38,19 @@ public class SpawnManager : MonoBehaviour
 
     private void SpawnEnemyWave(int enemiesToSpawn)
     {
-        if (enemyPrefab == null) return;
+        if (enemyPrefabs == null || enemyPrefabs.Count == 0) return;
+
         for (int i = 0; i < enemiesToSpawn; i++)
         {
-            Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
+            int randomIndex = Random.Range(0, enemyPrefabs.Count);
+            Instantiate(enemyPrefabs[randomIndex], GenerateSpawnPosition(), enemyPrefabs[randomIndex].transform.rotation);
         }
     }
 
     private void SpawnPowerup()
     {
-        if (powerupPrefab == null) return;
-        Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
+        if (powerupItemPrefabs == null || powerupItemPrefabs.Count == 0) return;
+        var randomIndex = Random.Range(0, powerupItemPrefabs.Count);
+        Instantiate(powerupItemPrefabs[randomIndex], GenerateSpawnPosition(), powerupItemPrefabs[randomIndex].transform.rotation);
     }
 }

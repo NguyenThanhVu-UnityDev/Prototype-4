@@ -32,4 +32,14 @@ public class Enemy : MonoBehaviour
 
         if (transform.position.y < -10) Destroy(gameObject);
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<PlayerController>() != null)
+        {
+            OnInteractWithPlayer(collision.gameObject);
+        }
+    }
+
+    protected virtual void OnInteractWithPlayer(GameObject player) { }
 }

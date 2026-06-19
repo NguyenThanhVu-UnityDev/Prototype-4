@@ -311,8 +311,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6828aac2c9c95e4c92af769ebc75708, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 8668806102888496277, guid: 2da94a20c7f5b1f4886ab10d0ba9a4c9, type: 3}
-  powerupPrefab: {fileID: 3595463573646474170, guid: 91a7403cc02eb2b45881f2386e6d01b0, type: 3}
+  enemyPrefabs:
+  - {fileID: 8668806102888496277, guid: 2da94a20c7f5b1f4886ab10d0ba9a4c9, type: 3}
+  - {fileID: 6319330762161209228, guid: 18c117a09e235184c91eed0f2f955d8d, type: 3}
+  powerupItemPrefabs:
+  - {fileID: 2607504668611574848, guid: 91a7403cc02eb2b45881f2386e6d01b0, type: 3}
+  - {fileID: 6372798126680133094, guid: 7afc4cd036be29f41b568202cd367b1c, type: 3}
+  - {fileID: 6031304154784969623, guid: ce97262fa993039459ecace9fba266ec, type: 3}
   spawnRange: 9
 --- !u!4 &1108135083
 Transform:
@@ -599,6 +604,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Island
       objectReference: {fileID: 0}
+    - target: {fileID: 1301643505922104, guid: 961be46ca9a355943ae3f65c47741bb0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 4625923886776944, guid: 961be46ca9a355943ae3f65c47741bb0, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -828,7 +837,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 07d10f1f7b833da4dbb11f858eae7961, type: 2}
+  - {fileID: 2100000, guid: e6e6f7a3c9f4839409af1eae15839382, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -886,10 +895,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 750
-  powerupStrength: 15
   powerupIndicator: {fileID: 830349035}
   powerUpIndicatorOffset: {x: 0, y: -0.5, z: 0}
-  hasPowerUp: 0
 --- !u!1001 &7305732181041295649
 PrefabInstance:
   m_ObjectHideFlags: 0

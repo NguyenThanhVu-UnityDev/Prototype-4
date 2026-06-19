@@ -1,10 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPowerupUser
 {
     [SerializeField] float playerSpeed = 1000;
-    [SerializeField] float powerupStrength = 15;
     [SerializeField] GameObject powerupIndicator;
     [SerializeField] Vector3 powerUpIndicatorOffset = new(0, -0.5f, 0);
 
@@ -12,7 +13,7 @@ public class PlayerController : MonoBehaviour
     private InputSystem_Actions controls;
     private GameObject focalPoint;
 
-    [SerializeField] bool hasPowerUp = false;
+    private PowerupInstance powerupInstance = null;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        UpdatePowerups();
         Move();
         UpdatePowerupIndicatorVisual();
     }
@@ -49,33 +51,57 @@ public class PlayerController : MonoBehaviour
         if (powerupIndicator != null) powerupIndicator.transform.position = transform.position + powerUpIndicatorOffset;
     }
 
+    public void UpdatePowerups()
+    { 
+        if (powerupInstance == null) return;
+        powerupInstance.OnTick();
+        if (powerupInstance == null) return;
+        if (controls != null && controls.Player.Jump.triggered) powerupInstance.OnActivate(); 
+    }
+
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Powerup"))
-        {
-            Destroy(other.gameObject);
-            hasPowerUp = true;
-            if (powerupIndicator != null) powerupIndicator.SetActive(true);
-            StartCoroutine(PowerupCountDownRoutine());
-        }
+        PlayerEvents.RaisePlayerTriggerEnter(other);
+        if (powerupInstance == null) return;
+            powerupInstance.OnUserTriggerEnter?.Invoke(this, other);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") &&
-            hasPowerUp)
-        {
-            Rigidbody enemyRb = collision.gameObject.GetComponent<Rigidbody>();
-            Vector3 awayFromPlayer = (collision.transform.position - transform.position);
-
-            if (enemyRb != null) enemyRb.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
-        }
+        PlayerEvents.RaisePlayerCollisionEnter(collision);
+        if (powerupInstance == null) return;
+        powerupInstance.OnUserCollisionEnter?.Invoke(this, collision);
     }
 
-    IEnumerator PowerupCountDownRoutine()
+    public void ActivatePowerupIndicator()
     {
-        yield return new WaitForSeconds(7);
-        hasPowerUp = false;
+        if (powerupIndicator != null) powerupIndicator.SetActive(true);
+    }
+
+    public void DeactivatePowerupIndicator()
+    {
         if (powerupIndicator != null) powerupIndicator.SetActive(false);
+    }
+
+    public bool OnReceivePowerup(PowerupInstance powerup)
+    {
+        if (powerup == null) return false;
+        if (powerupInstance != null) return false;
+        if (powerupInstance == powerup) return false;
+        powerup.OnEquip(this);
+        powerupInstance = powerup;
+        return true;
+    }
+
+    public GameObject GetUser()
+    {
+        return gameObject;
+    }
+
+    public void OnUnequipPowerup(PowerupInstance powerup)
+    {
+        if (powerup == null || powerup != powerupInstance) return;
+        powerupInstance = null;
     }
 }
